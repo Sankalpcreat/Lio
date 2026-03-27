@@ -581,6 +581,10 @@ async function playPcm16(base64Data, sampleRate = 24000) {
     playbackContext = new AudioContext();
   }
 
+  if (playbackContext.state === "suspended") {
+    await playbackContext.resume();
+  }
+
   const pcm = int16FromBase64(base64Data);
   const buffer = playbackContext.createBuffer(1, pcm.length, sampleRate);
   const channel = buffer.getChannelData(0);
@@ -761,18 +765,6 @@ async function stopMicrophone({ updateStatus = true } = {}) {
   elements.micButton.textContent = "Start Mic";
   document.body.classList.remove("is-listening");
   await requireDesktopApi().setVoiceState(false);
-  if (sessionConnected) {
-    try {
-      await requireDesktopApi().endAudioStream();
-    } catch (error) {
-      appendEntry(elements.logs, {
-        kind: "warn",
-        title: "audio stream end warning",
-        text: error.message,
-        timestamp: new Date().toISOString()
-      });
-    }
-  }
   if (updateStatus) {
     setStatus("idle");
   }

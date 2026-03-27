@@ -1,4 +1,4 @@
-import { GoogleGenAI, Modality } from "@google/genai";
+import { GoogleGenAI, Modality, StartSensitivity, EndSensitivity } from "@google/genai";
 import { access } from "node:fs/promises";
 import os from "node:os";
 import { execFile } from "node:child_process";
@@ -240,6 +240,15 @@ export class AgentService {
       responseModalities: [Modality.AUDIO],
       inputAudioTranscription: {},
       outputAudioTranscription: {},
+      realtimeInputConfig: {
+        automaticActivityDetection: {
+          disabled: false,
+          startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_LOW,
+          endOfSpeechSensitivity: EndSensitivity.END_SENSITIVITY_LOW,
+          prefixPaddingMs: 40,
+          silenceDurationMs: 600
+        }
+      },
       thinkingConfig: {
         thinkingLevel: this.runtimeConfig.thinkingLevel
       },
@@ -294,6 +303,7 @@ export class AgentService {
   async disconnect() {
     if (this.session) {
       try {
+        await this.endAudioStream();
         this.session.close();
       } catch {
         // Ignore close failures during shutdown.
@@ -337,12 +347,11 @@ export class AgentService {
       return { ok: true };
     }
 
-    const audioBytes = Buffer.from(base64Data, "base64");
-
     await this.session.sendRealtimeInput({
-      audio: new Blob([audioBytes], {
-        type: `audio/pcm;rate=${sampleRate}`
-      })
+      audio: {
+        data: base64Data,
+        mimeType: `audio/pcm;rate=${sampleRate}`
+      }
     });
 
     return { ok: true };
@@ -389,6 +398,10 @@ export class AgentService {
       this.send("live:interrupted", {
         timestamp: now()
       });
+    }
+
+    if (message.serverContent?.turnComplete) {
+      this.log("debug", "Live turn complete");
     }
 
     if (message.goAway?.timeLeft) {
