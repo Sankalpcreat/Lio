@@ -1,0 +1,70 @@
+{
+  "name": "lio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Lio is a macOS desktop app that connects Gemini 3.1 Flash Live to local Slack, Notion, and Apple CLIs.",
+  "author": "Sankalp Singh",
+  "main": "src/main.mjs",
+  "scripts": {
+    "build:native-helper": "bash scripts/build-native-helper.sh",
+    "start": "npm run build:native-helper && electron .",
+    "dev": "npm run build:native-helper && electron .",
+    "check": "node --check src/main.mjs && node --check src/live/agent-service.mjs && node --check src/live/tool-registry.mjs && node --check src/live/cli-runner.mjs && node --check src/preload.cjs && node --check src/renderer/app.js",
+    "build:icons": "bash scripts/generate-icons.sh",
+    "package:app": "bash scripts/package_app.sh",
+    "pack": "npm run build:icons && npm run build:native-helper && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --dir",
+    "dist": "npm run build:icons && npm run build:native-helper && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg --publish never"
+  },
+  "dependencies": {
+    "@google/genai": "^1.46.0",
+    "dotenv": "^17.3.1"
+  },
+  "devDependencies": {
+    "electron": "^41.0.4",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "com.sankalpsingh.lio",
+    "productName": "Lio",
+    "asar": true,
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "package.json",
+      ".env.example",
+      "README.md"
+    ],
+    "extraResources": [
+      {
+        "from": "assets/prebuilt",
+        "to": "prebuilt"
+      },
+      {
+        "from": "assets/native",
+        "to": "native"
+      }
+    ],
+    "extraMetadata": {
+      "main": "src/main.mjs"
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "identity": null,
+      "icon": "assets/icon.icns",
+      "target": [
+        "dmg"
+      ]
+    },
+    "dmg": {
+      "backgroundColor": "#f4f0e8",
+      "window": {
+        "width": 540,
+        "height": 380
+      }
+    }
+  }
+}

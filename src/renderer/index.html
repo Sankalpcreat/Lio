@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="show-onboarding">
+    <div class="ambient-grid" aria-hidden="true"></div>
+    <div class="ambient-orb ambient-orb-left" aria-hidden="true"></div>
+    <div class="ambient-orb ambient-orb-right" aria-hidden="true"></div>
+
+    <section id="onboardingShell" class="onboarding-shell">
+      <div class="onboarding-frame">
+        <header class="onboarding-header">
+          <div class="onboarding-header-spacer" aria-hidden="true"></div>
+          <div class="step-indicator">
+            <span id="stepPillOne" class="step-pill active">1. Gemini</span>
+            <span id="stepPillTwo" class="step-pill">2. Tools</span>
+          </div>
+        </header>
+
+        <section id="stepOne" class="step-screen">
+          <div class="step-hero">
+            <div class="step-copy">
+              <div class="eyebrow">Step 1</div>
+              <h2 class="hero-title">Add your Gemini Live API key</h2>
+              <p class="panel-copy">This is the only cloud credential required by the app. Slack, Notion, and Apple stay local to this Mac.</p>
+            </div>
+
+            <div class="key-stage">
+              <label>
+                Gemini API Key
+                <input id="onboardingApiKey" type="password" placeholder="AIza..." />
+              </label>
+              <p id="stepOneHint" class="inline-hint">Enter your Gemini API key to continue.</p>
+              <div class="inline-actions">
+                <button id="stepOneContinueButton" disabled>Continue to tool setup</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="stepTwo" class="step-screen hidden">
+          <div class="step-two-head">
+            <div>
+              <div class="eyebrow">Step 2</div>
+              <h2 class="hero-title">Install and verify your local tools</h2>
+              <p class="panel-copy">Only three tools matter here: Slack, Notion, and Apple. Install the local CLI, add credentials where needed, then run a live verification on this Mac.</p>
+            </div>
+            <div class="inline-actions">
+              <button id="backToStepOneButton" class="secondary">Back</button>
+              <button id="returnToWorkspaceButton" class="secondary hidden">Back To Workspace</button>
+            </div>
+          </div>
+
+          <div class="service-rows">
+            <article class="service-row" data-service="slack">
+              <div class="service-media service-media-dark">
+                <img class="service-logo service-logo-slack" src="./providers/slack-cli-banner.png" alt="Slack CLI" />
+              </div>
+              <div class="service-main">
+                <div class="service-main-head">
+                  <div>
+                    <h3>Slack CLI</h3>
+                    <p class="panel-copy">Install the bundled CLI, then paste a Slack user token. The app saves it in a Slack-compatible format and verifies it with a live `auth test`.</p>
+                  </div>
+                  <span class="service-chip" id="slackStatusChip">Not installed</span>
+                </div>
+                <div class="service-facts">
+                  <div class="service-fact"><span>Install</span><strong id="slackInstallState">Not installed</strong></div>
+                  <div class="service-fact"><span>Auth</span><strong id="slackAuthState">Token required</strong></div>
+                  <div class="service-fact"><span>Live check</span><strong id="slackVerifyState">Not run</strong></div>
+                </div>
+                <p id="slackStatusDetail" class="service-detail">Slack CLI is not installed yet.</p>
+                <label>
+                  Slack User Token
+                  <input id="slackTokenInput" type="password" placeholder="xoxp-..." />
+                </label>
+                <div class="service-actions">
+                  <button data-install="slack" class="install-plus" aria-label="Install Slack CLI" title="Install Slack CLI">+</button>
+                  <button class="secondary" data-save-token="slack">Save Token</button>
+                  <button class="secondary" data-verify="slack">Verify</button>
+                </div>
+                <div class="service-links">
+                  <button class="tertiary utility-link" data-open-guide="slack">Guide</button>
+                  <button class="tertiary utility-link" data-open-url="https://api.slack.com/apps">Slack Apps</button>
+                  <button class="tertiary utility-link github-link" data-open-url="https://github.com/Sankalpcreat/Slack-Cli" aria-label="Open Slack CLI GitHub" title="Open Slack CLI GitHub">
+                    <svg class="button-icon" viewBox="0 0 16 16" aria-hidden="true">
+                      <path fill="currentColor" d="M8 .2a8 8 0 0 0-2.53 15.6c.4.08.54-.17.54-.38v-1.34c-2.2.48-2.67-.93-2.67-.93-.36-.9-.88-1.14-.88-1.14-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.7 1.2 1.85.86 2.3.66.08-.52.28-.86.5-1.06-1.76-.2-3.62-.88-3.62-3.92 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.1 0 0 .67-.22 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.09.16 1.9.08 2.1.51.56.82 1.28.82 2.15 0 3.05-1.87 3.72-3.64 3.91.29.25.54.73.54 1.48v2.2c0 .21.14.46.55.38A8 8 0 0 0 8 .2Z"/>
+                    </svg>
+                    <span>GitHub</span>
+                  </button>
+                </div>
+                <p id="slackStateMeta" class="service-meta"></p>
+                <div id="slackActionNote" class="action-note"></div>
+              </div>
+            </article>
+
+            <article class="service-row" data-service="notion">
+              <div class="service-media service-media-dark">
+                <img class="service-logo service-logo-notion" src="./providers/notion-cli-banner.png" alt="Notion CLI" />
+              </div>
+              <div class="service-main">
+                <div class="service-main-head">
+                  <div>
+                    <h3>Notion CLI</h3>
+                    <p class="panel-copy">Install the bundled CLI, then paste a Notion integration token. The app writes a compatible local credential file and verifies it with a live `user me` request.</p>
+                  </div>
+                  <span class="service-chip" id="notionStatusChip">Not installed</span>
+                </div>
+                <div class="service-facts">
+                  <div class="service-fact"><span>Install</span><strong id="notionInstallState">Not installed</strong></div>
+                  <div class="service-fact"><span>Auth</span><strong id="notionAuthState">Token required</strong></div>
+                  <div class="service-fact"><span>Live check</span><strong id="notionVerifyState">Not run</strong></div>
+                </div>
+                <p id="notionStatusDetail" class="service-detail">Notion CLI is not installed yet.</p>
+                <label>
+                  Notion Token
+                  <input id="notionTokenInput" type="password" placeholder="secret_xxx" />
+                </label>
+                <div class="service-actions">
+                  <button data-install="notion" class="install-plus" aria-label="Install Notion CLI" title="Install Notion CLI">+</button>
+                  <button class="secondary" data-save-token="notion">Save Token</button>
+                  <button class="secondary" data-verify="notion">Verify</button>
+                </div>
+                <div class="service-links">
+                  <button class="tertiary utility-link" data-open-guide="notion">Guide</button>
+                  <button class="tertiary utility-link" data-open-url="https://www.notion.so/profile/integrations">Integrations</button>
+                  <button class="tertiary utility-link github-link" data-open-url="https://github.com/Sankalpcreat/Notion-CLI" aria-label="Open Notion CLI GitHub" title="Open Notion CLI GitHub">
+                    <svg class="button-icon" viewBox="0 0 16 16" aria-hidden="true">
+                      <path fill="currentColor" d="M8 .2a8 8 0 0 0-2.53 15.6c.4.08.54-.17.54-.38v-1.34c-2.2.48-2.67-.93-2.67-.93-.36-.9-.88-1.14-.88-1.14-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.7 1.2 1.85.86 2.3.66.08-.52.28-.86.5-1.06-1.76-.2-3.62-.88-3.62-3.92 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.1 0 0 .67-.22 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.09.16 1.9.08 2.1.51.56.82 1.28.82 2.15 0 3.05-1.87 3.72-3.64 3.91.29.25.54.73.54 1.48v2.2c0 .21.14.46.55.38A8 8 0 0 0 8 .2Z"/>
+                    </svg>
+                    <span>GitHub</span>
+                  </button>
+                </div>
+                <p id="notionStateMeta" class="service-meta"></p>
+                <div id="notionActionNote" class="action-note"></div>
+              </div>
+            </article>
+
+            <article class="service-row" data-service="apple">
+              <div class="service-media service-media-dark">
+                <img class="service-logo service-logo-apple" src="./providers/apple-cli-banner.png" alt="Apple CLI" />
+              </div>
+              <div class="service-main">
+                <div class="service-main-head">
+                  <div>
+                    <h3>Apple CLI</h3>
+                    <p class="panel-copy">Install the bundled CLI, then verify that macOS grants Automation access to Reminders, Notes, Calendar, and Messages.</p>
+                  </div>
+                  <span class="service-chip" id="appleStatusChip">Not installed</span>
+                </div>
+                <div class="service-facts">
+                  <div class="service-fact"><span>Install</span><strong id="appleInstallState">Not installed</strong></div>
+                  <div class="service-fact"><span>Access</span><strong id="appleAuthState">Permission required</strong></div>
+                  <div class="service-fact"><span>Live check</span><strong id="appleVerifyState">Not run</strong></div>
+                </div>
+                <p id="appleStatusDetail" class="service-detail">Apple CLI is not installed yet.</p>
+                <div class="service-input-spacer" aria-hidden="true"></div>
+                <div class="service-actions">
+                  <button data-install="apple" class="install-plus" aria-label="Install Apple CLI" title="Install Apple CLI">+</button>
+                  <button class="secondary" data-verify="apple">Verify</button>
+                </div>
+                <div class="service-links">
+                  <button class="tertiary utility-link" data-open-url="x-apple.systempreferences:com.apple.preference.security?Privacy_Automation">Automation</button>
+                  <button class="tertiary utility-link github-link" data-open-url="https://github.com/Sankalpcreat/Apple-CLI" aria-label="Open Apple CLI GitHub" title="Open Apple CLI GitHub">
+                    <svg class="button-icon" viewBox="0 0 16 16" aria-hidden="true">
+                      <path fill="currentColor" d="M8 .2a8 8 0 0 0-2.53 15.6c.4.08.54-.17.54-.38v-1.34c-2.2.48-2.67-.93-2.67-.93-.36-.9-.88-1.14-.88-1.14-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.7 1.2 1.85.86 2.3.66.08-.52.28-.86.5-1.06-1.76-.2-3.62-.88-3.62-3.92 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.1 0 0 .67-.22 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.09.16 1.9.08 2.1.51.56.82 1.28.82 2.15 0 3.05-1.87 3.72-3.64 3.91.29.25.54.73.54 1.48v2.2c0 .21.14.46.55.38A8 8 0 0 0 8 .2Z"/>
+                    </svg>
+                    <span>GitHub</span>
+                  </button>
+                </div>
+                <p id="appleStateMeta" class="service-meta"></p>
+                <div id="appleActionNote" class="action-note"></div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="workspaceShell" class="workspace-shell">
+      <div class="shell">
+        <main class="content">
+          <section class="panel topbar">
+            <div class="topbar-copy">
+              <div class="eyebrow">Operator Surface</div>
+              <div class="topbar-title-row">
+                <h2 class="topbar-title">Voice workspace</h2>
+                <div id="statusBadge" class="badge">idle</div>
+              </div>
+              <p class="panel-copy">Connect, check state, then run Slack, Notion, and Apple actions from one live surface.</p>
+            </div>
+
+            <div class="topbar-actions">
+              <button id="editSetupButton" class="secondary">Edit Setup</button>
+              <button id="shortcutButton" class="secondary">Shortcut</button>
+              <button id="checksButton" class="secondary">Run Checks</button>
+              <button id="connectButton">Connect</button>
+              <button id="disconnectButton" class="secondary">Disconnect</button>
+            </div>
+          </section>
+
+          <section class="panel composer-panel">
+            <div class="composer-head">
+              <div>
+                <h2>Prompt Composer</h2>
+                <p class="panel-copy">Speak for live control or type a precise instruction.</p>
+              </div>
+              <div class="toolbar composer-toolbar">
+                <button id="micButton" class="accent">Start Mic</button>
+                <button id="clearLogsButton" class="secondary">Clear Logs</button>
+              </div>
+            </div>
+
+            <form id="textForm" class="composer-form">
+              <div class="composer-example">Examples: Check today’s Slack messages, search Notion for release notes, or create a reminder for tomorrow at 9 PM.</div>
+              <textarea id="textInput" rows="4" placeholder="Type your next action..."></textarea>
+              <div class="composer-submit-row">
+                <div class="composer-note">Use the mic only when you want a live turn.</div>
+                <button type="submit">Send</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="workspace-grid">
+            <section class="panel transcript-panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Transcript</h2>
+                  <p class="panel-copy">Live turns in chronological order.</p>
+                </div>
+              </div>
+              <div id="transcript" class="feed transcript-feed"></div>
+            </section>
+
+            <section class="panel logs-panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Activity Log</h2>
+                  <p class="panel-copy">Checks, tool execution, runtime state, and errors.</p>
+                </div>
+              </div>
+              <div id="logs" class="feed logs"></div>
+            </section>
+          </section>
+        </main>
+      </div>
+    </section>
+
+    <div id="guideModal" class="guide-modal hidden" aria-hidden="true">
+      <div id="guideModalBackdrop" class="guide-modal-backdrop"></div>
+      <section class="guide-dialog" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+        <div class="guide-head">
+          <div>
+            <div id="guideEyebrow" class="eyebrow">Setup Guide</div>
+            <h2 id="guideTitle" class="guide-title">Guide</h2>
+            <p id="guideIntro" class="panel-copy"></p>
+          </div>
+          <button id="guideCloseButton" class="secondary guide-close" aria-label="Close guide">Close</button>
+        </div>
+
+        <ol id="guideSteps" class="guide-steps"></ol>
+
+        <div id="guideLinks" class="guide-links"></div>
+      </section>
+    </div>
+
+    <div id="shortcutModal" class="guide-modal hidden" aria-hidden="true">
+      <div id="shortcutModalBackdrop" class="guide-modal-backdrop"></div>
+      <section class="guide-dialog shortcut-dialog" role="dialog" aria-modal="true" aria-labelledby="shortcutTitle">
+        <div class="guide-head">
+          <div>
+            <div class="eyebrow">Voice Shortcut</div>
+            <h2 id="shortcutTitle" class="guide-title">Toggle the live mic from anywhere</h2>
+            <p class="panel-copy">Press once to connect and start the mic. Press again to stop listening. This build supports standard Electron accelerators; `Fn`-only shortcuts still need a native macOS helper.</p>
+          </div>
+          <button id="shortcutCloseButton" class="secondary guide-close" aria-label="Close shortcut settings">Close</button>
+        </div>
+
+        <div class="shortcut-grid">
+          <section class="shortcut-block">
+            <div class="eyebrow">Active Shortcut</div>
+            <div id="shortcutCurrentValue" class="shortcut-value">Command + Shift + Space</div>
+            <p class="panel-copy">Current global toggle for connect + microphone.</p>
+          </section>
+
+          <section class="shortcut-block">
+            <div class="eyebrow">Change Shortcut</div>
+            <button id="shortcutCaptureButton" class="secondary shortcut-capture-button" type="button">Press a new shortcut</button>
+            <p id="shortcutCaptureHint" class="panel-copy">Use Command, Control, Option, Shift, letters, numbers, function keys, or Space.</p>
+            <div class="shortcut-presets">
+              <button id="shortcutPresetFnButton" class="tertiary" type="button">Use Fn</button>
+              <button id="shortcutPresetFnSpaceButton" class="tertiary" type="button">Use Fn + Space</button>
+            </div>
+            <p class="panel-copy">For Fn shortcuts, also make sure macOS is not still using Globe/Fn for Dictation, Emoji, or another system action.</p>
+          </section>
+        </div>
+
+        <div class="shortcut-actions">
+          <button id="shortcutResetButton" class="tertiary" type="button">Reset Default</button>
+          <button id="shortcutSaveButton" type="button" disabled>Save Shortcut</button>
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

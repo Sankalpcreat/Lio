@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.env
+.DS_Store
+*.log
+
+# Generated macOS app icons
+assets/icon.iconset/
+assets/icon-1024.png
+assets/icon.icns
+
+# Generated native helper bundle
+assets/native/
+
+# Local reference notes
+file.md
+file2.md
