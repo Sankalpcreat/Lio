@@ -585,6 +585,10 @@ ipcMain.handle("session:send-audio", async (_event, payload) => {
   return agentService.sendAudioChunk(payload);
 });
 
+ipcMain.handle("session:end-audio", async () => {
+  return agentService.endAudioStream();
+});
+
 ipcMain.handle("onboarding:get-state", async () => {
   return onboardingService.getState();
 });

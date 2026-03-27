@@ -4,6 +4,19 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
+load_local_env() {
+  local env_file="$1"
+  if [[ -f "$env_file" ]]; then
+    set -a
+    # shellcheck disable=SC1090
+    source "$env_file"
+    set +a
+  fi
+}
+
+load_local_env "$ROOT_DIR/.env"
+load_local_env "$ROOT_DIR/.packaging.env"
+
 APP_NAME="$(node -p "require('./package.json').build.productName")"
 VERSION="$(node -p "require('./package.json').version")"
 APP_DIR="$ROOT_DIR/dist/mac-arm64/${APP_NAME}.app"

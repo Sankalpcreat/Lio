@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld("geminiDesktop", {
   disconnectSession: () => ipcRenderer.invoke("session:disconnect"),
   sendText: (text) => ipcRenderer.invoke("session:send-text", { text }),
   sendAudioChunk: (payload) => ipcRenderer.invoke("session:send-audio", payload),
+  endAudioStream: () => ipcRenderer.invoke("session:end-audio"),
   showWindow: () => ipcRenderer.invoke("app:show-window"),
   hideWindow: () => ipcRenderer.invoke("app:hide-window"),
   setVoiceState: (listening) => ipcRenderer.invoke("voice:set-state", { listening }),

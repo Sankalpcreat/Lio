@@ -337,11 +337,24 @@ export class AgentService {
       return { ok: true };
     }
 
+    const audioBytes = Buffer.from(base64Data, "base64");
+
     await this.session.sendRealtimeInput({
-      audio: {
-        data: base64Data,
-        mimeType: `audio/pcm;rate=${sampleRate}`
-      }
+      audio: new Blob([audioBytes], {
+        type: `audio/pcm;rate=${sampleRate}`
+      })
+    });
+
+    return { ok: true };
+  }
+
+  async endAudioStream() {
+    if (!this.session) {
+      return { ok: true };
+    }
+
+    await this.session.sendRealtimeInput({
+      audioStreamEnd: true
     });
 
     return { ok: true };

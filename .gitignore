@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .env
+.packaging.env
 .DS_Store
 *.log
 
