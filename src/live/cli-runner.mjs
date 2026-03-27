@@ -23,6 +23,27 @@ function coerceStringArray(value) {
     .filter(Boolean);
 }
 
+function hasFlag(args, flagName) {
+  return args.includes(flagName);
+}
+
+function normalizeAppleArgs(args) {
+  if (args[0] !== "notes") {
+    return args;
+  }
+
+  const subcommand = args[1] ?? "";
+  if (subcommand === "accounts") {
+    return args;
+  }
+
+  if (hasFlag(args, "--account")) {
+    return args;
+  }
+
+  return [...args, "--account", "iCloud"];
+}
+
 function resolveBinaryPath(cliName, providedPath) {
   const trimmed = String(providedPath ?? "").trim();
   return trimmed || cliName;
@@ -35,7 +56,8 @@ export async function runCliTool({
   args,
   unsafeMode
 }) {
-  const normalizedArgs = coerceStringArray(args);
+  const rawArgs = coerceStringArray(args);
+  const normalizedArgs = cliName === "apple" ? normalizeAppleArgs(rawArgs) : rawArgs;
   const executable = resolveBinaryPath(cliName, binaryPath);
 
   if (MUTATING_TOOL_NAMES.has(toolName) && !unsafeMode) {
